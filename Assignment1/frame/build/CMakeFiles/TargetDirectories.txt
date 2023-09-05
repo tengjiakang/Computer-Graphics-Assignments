@@ -1,0 +1,3 @@
+D:/PostGradudte/Courses/Computer Graphics/Assignments/Computer-Graphics-Assignments/Assignment1/frame/build/CMakeFiles/Rasterizer.dir
+D:/PostGradudte/Courses/Computer Graphics/Assignments/Computer-Graphics-Assignments/Assignment1/frame/build/CMakeFiles/edit_cache.dir
+D:/PostGradudte/Courses/Computer Graphics/Assignments/Computer-Graphics-Assignments/Assignment1/frame/build/CMakeFiles/rebuild_cache.dir
