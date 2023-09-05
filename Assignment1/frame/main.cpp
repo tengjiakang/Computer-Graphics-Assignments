@@ -27,6 +27,12 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
 
+    float a = rotation_angle / 180 * MY_PI;
+    model << cos(a), -sin(a), 0, 0,
+        sin(a), cos(a), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1;
+
     return model;
 }
 
@@ -40,7 +46,35 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
+    
+    float n = zNear, f = zFar;
 
+    // 透视投影->正交投影  挤压
+    Eigen::Matrix4f Mpersp_orhtho;
+    Mpersp_orhtho << n, 0, 0, 0,
+        0, n, 0, 0,
+        0, 0, n + f, -n*f,
+        0, 0, 1, 0;
+
+    // 正交投影->正则立方体
+        // 将视锥信息为r,l,t,b
+    float fovY = eye_fov / 180 * MY_PI;// 角度转弧度
+    float t = tan(fovY / 2) * (-n), b = -t;// 朝向-z方向|n|
+    float r = aspect_ratio * t, l = -r;
+        // 转换到正则立方体
+    Eigen::Matrix4f Mortho, Mtrans, Mscale;
+    Mtrans << 1, 0, 0, -(r + l) / 2,
+        0, 1, 0, -(t + b) / 2,
+        0, 0, 1, -(n + f) / 2,
+        0, 0, 0, 1;
+    Mscale << 2 / (r - l), 0, 0, 0,
+        0, 2 / (t - b), 0, 0,
+        0, 0, 2 / (n - f), 0,
+        0, 0, 0, 1;
+    Mortho = Mscale * Mtrans;
+    
+    // 计算得到投影矩阵
+    projection = Mortho * Mpersp_orhtho;
     return projection;
 }
 
